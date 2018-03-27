@@ -4,7 +4,6 @@
 typedef int data;
 void Read(data* H, int n, int *T, int m);
 void InitHeap(data* H, int n);
-//void sift(data* H, int s, int end);	
 void InsertHeap(data* H, int i);	
 int main()
 {
