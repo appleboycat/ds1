@@ -7,7 +7,7 @@ void InitHeap(data* H, int n);
 void InsertHeap(data* H, int i);	
 int main()
 {
-	freopen("7-5-data.in", "r", stdin);
+//	freopen("7-5-data.in", "r", stdin);
 	int n, m;
 	scanf("%d %d\n", &n, &m);
 	data* H = (data*)malloc(sizeof(data) * (n+1));	
@@ -25,7 +25,7 @@ int main()
 		}
 		printf("\n");
 	}
-	fclose("stdin");
+//	fclose("stdin");
 	return 0;
 }
 
