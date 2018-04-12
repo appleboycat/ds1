@@ -6,13 +6,25 @@
 #define MAXQ 10
 
 typedef int vtype;
+typedef struct adjnode
+{
+	int			vidx;
+	struct adjnode *next;
+	//AdjnodeType data;
+}adjnode;
+typedef struct vexnode
+{
+	adjnode		*firstarc;
+	//VexType		data;
+}vexnode, Adjlist[MAXV];
 typedef struct graph
 {	
-	int		vxnum;
-	int		egnum;
-	int		edge[MAXV][MAXV];
-	vtype	vertex[MAXV];
-}Mgraph;
+	int			vexnum, arcnum;
+	Adjlist		vertices;
+	
+	
+	adjnode AdjList[MAXV];	
+}ALgraph;
 	
 void BFS(Mgraph *m, int *visit, int start)
 {
