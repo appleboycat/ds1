@@ -10,20 +10,15 @@ typedef struct adjnode
 {
 	int			vidx;
 	struct adjnode *next;
-	//AdjnodeType data;
 }adjnode;
 typedef struct vexnode
 {
 	adjnode		*firstarc;
-	//VexType		data;
 }vexnode, Adjlist[MAXV];
 typedef struct graph
 {	
 	int			vexnum, arcnum;
 	Adjlist		vertices;
-	
-	
-	adjnode AdjList[MAXV];	
 }ALgraph;
 	
 void BFS(Mgraph *m, int *visit, int start)
@@ -80,15 +75,19 @@ void DFS(Mgraph *m, int *visit, int start)
 int main()
 {
 	freopen("7-6-data.1", "r", stdin);
-	Mgraph *m = (Mgraph*)malloc(sizeof(Mgraph));
-	scanf("%d %d\n", &(m->vxnum), &(m->egnum));
-	int vn = m->egnum;
-	while(vn --)
+	ALgraph *al = (ALgraph*)malloc(sizeof(ALgraph));
+	scanf("%d %d\n", &(al->vexnum), &(al->arcnum));
+	int acn = al->arcnum;
+	while(acn --)
 	{
 		int i, j;
 		scanf("%d %d", &i, &j);
-		m->edge[i][j] = 1;
-		m->edge[j][i] = 1;
+		arcnode *p = al->vertices[i].firstarc;
+		if(p != NULL)
+			while(p->next != NULL)p = p->next;
+		arcnode *tmp = (arcnode*)malloc(sizeof(arcnode));
+		tmp->next = NULL:
+		p->next = tmp;
 	}
 
 	int visit[MAXQ] = {0};
