@@ -6,22 +6,40 @@
 #define MAXQ 10
 
 typedef int vtype;
-typedef struct adjnode
+typedef struct arcnode
 {
-	int			vidx;
-	struct adjnode *next;
-}adjnode;
+	int				vidx;
+	struct arcnode *next;
+}arcnode;
 typedef struct vexnode
 {
-	adjnode		*firstarc;
+	arcnode		*firstarc;
 }vexnode, Adjlist[MAXV];
 typedef struct graph
 {	
 	int			vexnum, arcnum;
 	Adjlist		vertices;
 }ALgraph;
+void DFS(ALgraph *al, int *visit, int start)
+{
+	if(visit[start] != 0)
+		return;
+	else
+	{
+		visit[start] = 1;
+		printf(" %d", start);
+		for(arcnode *p = al->vertices[start].firstarc; p != NULL ; p = al->vertices[p->vidx].firstarc)
+		{
+			if(visit[p->vidx] == 0)
+			{
+				DFS(al, visit, p->vidx);
+				//	break;
+			}
+		}
+	}
+}
 	
-void BFS(Mgraph *m, int *visit, int start)
+/*void BFS(ALgraph *al, int *visit, int start)
 {
 	if(visit[start] != 0)
 		return;
@@ -35,7 +53,7 @@ void BFS(Mgraph *m, int *visit, int start)
 	{
 		int tmp = que[front];
 		front = (front + 1) % MAXQ;
-		for(int i = 0; i < m->vxnum; i++)
+		for(int i = 0; i < al->vexnum; i++)
 		{
 			if((visit[i] == 0) && (m->edge[tmp][i] == 1))
 			{
@@ -51,66 +69,67 @@ void BFS(Mgraph *m, int *visit, int start)
 			}
 		}			
 	}
-}
+}*/
 		
-void DFS(Mgraph *m, int *visit, int start)
-{
-	if(visit[start] != 0)
-		return;
-	else
-	{
-		visit[start] = 1;
-		printf(" %d", start);
-		for(int i = 0; i < m->vxnum; i++)
-		{
-			if((m->edge[start][i] == 1)&&(visit[i] == 0))
-			{
-				DFS(m, visit, i);
-				//	break;
-			}
-		}
-	}
-}
 
 int main()
 {
 	freopen("7-6-data.1", "r", stdin);
 	ALgraph *al = (ALgraph*)malloc(sizeof(ALgraph));
+	printf("sizeof graph:%d\n", sizeof(ALgraph));
+	//for(int i = 0; i < MAXV; i++)
 	scanf("%d %d\n", &(al->vexnum), &(al->arcnum));
 	int acn = al->arcnum;
+	for(int i = 0; i < acn; i++)
+		al->vertices[i].firstarc = NULL;
 	while(acn --)
 	{
 		int i, j;
 		scanf("%d %d", &i, &j);
-		arcnode *p = al->vertices[i].firstarc;
-		if(p != NULL)
-			while(p->next != NULL)p = p->next;
+		arcnode *p = al->vertices[i].firstarc->next;
+
 		arcnode *tmp = (arcnode*)malloc(sizeof(arcnode));
-		tmp->next = NULL:
-		p->next = tmp;
+		tmp->next = NULL;
+			printf("tmp %p\n", tmp); 
+			printf("al  %p\n", al->vertices[i].firstarc);
+			printf("p   %p\n", p); 
+			printf("p   %d\n", p); 
+
+		if(p == NULL)
+		{
+			printf("after:\n"); 
+			al->vertices[i].firstarc = tmp;
+			printf("%p\n", al->vertices[i].firstarc);
+			printf("%p\n", p); 
+		}
+		else
+		{
+			while(p->next != NULL)p = p->next;
+			p->next = tmp;
+		}
 	}
 
 	int visit[MAXQ] = {0};
-	for(int i = 0; i < m->vxnum; i++)
+	for(int i = 0; i < al->arcnum; i++)
 	{	
 		if(visit[i] == 0)
 		{
 			printf("{");
-			DFS(m, visit, i);
+			DFS(al, visit, i);
 			printf(" }\n");
 		}
 	}
 	
 	memset(visit, 0, (MAXQ * sizeof(int)));
-	for(int i = 0; i < m->vxnum; i++)
+	/*for(int i = 0; i < al->arcnum; i++)
 	{
 		if(visit[i] == 0)
 		{
 			printf("{");
-			BFS(m, visit, i);
+			//BFS(m, visit, i);
 			printf(" }\n");
 		}
-	}
+	}*/
 
 	fclose(stdin);
 	return 0;
