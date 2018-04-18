@@ -4,28 +4,28 @@
 
 #define MAXV 100
 
-typedef int vtype;
 typedef struct arcnode
 {
-	int				vidx;
+	int             vidx;
 	struct arcnode *next;
 }arcnode;
 typedef struct vexnode
 {
-	arcnode		*firstarc;
+	arcnode    *firstarc;
 	
 }vexnode, Adjlist[MAXV];
+
 typedef struct graph
-{	
-	int			vexnum, arcnum;
-	Adjlist		vertices;
+{
+	int   vexnum, arcnum;
+	Adjlist     vertices;
 }ALgraph;
+
 static int depth = 0;
-void DFS(ALgraph *al, int *visit, int start)
+/*void DFS(ALgraph *al, int *visit, int start)
 {
 	if((visit[start] != 0)||(depth > 6))
 	{
-		depth --;
 		return;
 	}
 	else
@@ -39,11 +39,13 @@ void DFS(ALgraph *al, int *visit, int start)
 			{
 				DFS(al, visit, p->vidx);
 			}
+			depth --;
 		}
 	}
-}
+}*/
 int main()
 {
+	//freopen("7-6-data.1", "r", stdin);
 	freopen("7-7-data.in", "r", stdin);
 	ALgraph *al = (ALgraph*)malloc(sizeof(ALgraph));
 	scanf("%d %d\n", &(al->vexnum), &(al->arcnum));
@@ -91,15 +93,16 @@ int main()
 	for(int i = 1; i <= vn; i++)
 	{	
 		depth = 0;
-		printf("\n");
-		DFS(al, visit, i);
-		printf("\n");
+		//printf("\n");
+		BFS(al, visit, i);
+		//printf("\n");
 		
-		for(int j = 1; j < vn; j++)
+		for(int j = 1; j <= vn; j++)
 			if(visit[j] > 0)
 				reach[i] ++;
-		printf("reach[%d]=%d\n", i, reach[i]);
-		printf("depth=%d\n", depth);
+		float t = (float)reach[i]/vn * 100;
+		printf("%d: %.2f%%\n", i, t);
+
 		memset(visit, 0, (MAXV * sizeof(int)));
 	}
 
@@ -109,38 +112,43 @@ int main()
 	return 0;
 }
 	
-/*void BFS(ALgraph *al, int *visit, int start)
+void BFS(ALgraph *al, int *visit, int start)
 {
-	if(visit[start] != 0)
-		return;
-	printf(" %d", start);
 	visit[start] = 1;
-	int	que[MAXQ];
+	int	que[MAXV];
 	int front = 0, rear = 0;
 	que[rear] = start;
-	rear = (rear + 1) % MAXQ;
-	int depth = 1;
-	while( (rear != front)&&(depth < 6))
+	rear = (rear + 1) % MAXV;
+
+	depth = 1;
+	int last = start;
+	int tail;
+
+	while((rear != front)&&(depth <= 6))
 	{
 		int tmp = que[front];
-		front = (front + 1) % MAXQ;
-		for(arcnode *p = al->vertices[tmp].firstarc; p != NULL; p = p->next)
+		front = (front + 1) % MAXV;
+		printf("DEQ %d \n", tmp);
+		for(arcnode *p = al->vertices[tmp].firstarc; (p != NULL)&&(depth <= 6) ; p = p->next)
 		{
 			if(visit[p->vidx] == 0)
 			{
-				printf(" %d", p->vidx);
+				printf(" %d(%d)\n", p->vidx, depth);
 				visit[p->vidx] = 1;
-				//if(((rear + 1) % MAXQ) != front)
-				//{
-					que[rear] = p->vidx;  
-					rear = (rear + 1) % MAXQ;
-				//}
-				//else
-			    //	printf("Error: que is full!!\n");
+				que[rear] = p->vidx;  
+				rear = (rear + 1) % MAXV;
+				tail = p->vidx;
 			}
 		}			
-		depth ++;
+		printf("last = %d tail = %d\n", last, tail);
+		if(tmp == last)
+		{
+			depth ++;
+			last = tail;
+			printf("depth++==============================\n", depth);
+		}
 	}
-}*/
+}
+
 		
 
